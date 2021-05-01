@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+
+}
+@model Recreation.Models.Story
+
+
+    <div class="well">
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <div class="col-sm-12" style="padding: 0 2px">
+                    <h2 id="newtitle" style="text-align:center;">@Model.Title</h2>
+                    <div id="newData" style="text-align:center;">@Model.CreateDate</div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div id="newContent" class="col-sm-10">
+                            @Html.Raw(Model.Content)
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

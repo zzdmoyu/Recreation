@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>猪猪大墨玉</title>
+    @Styles.Render("~/Content/lib/layui-v2.6.3/css/layui.css")
+    @Styles.Render("~/Content/ivew/styles/iview.css")
+    @Scripts.Render("~/Content/js/jquery-3.2.1.min.js")
+    @Scripts.Render("~/Content/vue/vue.min.js")
+    @Scripts.Render("~/Content/vue/axios.js")
+    @Scripts.Render("~/Content/ivew/iview.min.js")
+    @Scripts.Render("~/Content/vue/linq.min.js")
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" style="background-color:#2b85e4;">
+            <div class="layui-logo"><img src="/Content/img/logo.png" width="40" height="40"></div>
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item">@Html.ActionLink("电影", "VideoIndex", "Video")</li>
+                <li class="layui-nav-item">@Html.ActionLink("文章", "StoryList", "Story")</li>
+                <li class="layui-nav-item">@Html.ActionLink("图片", "ImageIndex", "Image")</li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">解决方案</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">@Html.ActionLink("Write", "StoryIndex", "Story")</a></dd>
+                        <dd><a href="">@Html.ActionLink("上传图片", "UploadIndex", "Image")</a></dd>
+                    </dl>
+                </li>
+
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="#">
+                        <img src="/Content/img/head.jpg" class="layui-nav-img">
+                        <span>猪猪大墨玉</span>
+                    </a>
+                </li>
+                <li class="layui-nav-item"><a href="#"><h1 style="font-size:large;color:antiquewhite">Don`t worry,Be Happy.</h1></a></li>
+            </ul>
+        </div>
+        <div class="layui-body layui-tab-content" style="left:0px;height:20px">
+            @RenderBody()
+        </div>
+    </div>
+    @Scripts.Render("~/Content/lib/layui-v2.6.3/layui.js")
+    @Scripts.Render("~/Content/js/lay-config.js")
+    @RenderSection("scripts", required: false)
+    <script>
+        layui.use('element', function () {
+            var element = layui.element;
+        });
+    </script>
+</body>
+</html>

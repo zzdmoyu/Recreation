@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@Scripts.Render("~/Content/vue/moment.min.js")
+    <div id="appStory" style="padding:32px; padding:20px;">
+        <div style="width:60%">
+            <Alert>
+                <div style="text-align:center">
+                    <h1> 文章列表 </h1>
+                </div>
+            </Alert>
+            <i-table stripe :columns="columns" :data="curData">
+            </i-table>
+            <br>
+            <Page :total="dataCount" :page-size="pageSize" show-total class="paging" @@on-change="changepage"></Page>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    $(function () {
+        moment.locale();  
+        new Vue({
+            delimiters: ['${', '}'],
+            el: '#appStory',
+            data() {
+                return {
+                    columns: [
+                        {
+                            title: '标题',
+                            key: 'Title',
+                            render: (h, params) => {
+                                return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        }, on: {
+                                            click: () => {
+                                                this.GetStoryInfo(params.row.StoryId);
+                                            }
+                                        }
+                                    }, params.row.Title)
+                                ]);
+                            }
+                        },
+                        {
+                            title: '从属',
+                            key: 'SubTitle'
+                        },
+                        {
+                            title: '类别',
+                            key: 'StoryType',
+                            render: (h, params) => {
+                                switch (params.row.StoryType) {
+                                    case 0:
+                                        return h('span', '短篇');
+                                        break;
+                                    case 1:
+                                        return h('span', '长篇');
+                                        break;
+                                }
+                            }
+                        },
+                        {
+                            title: '创建日期',
+                            key: 'CreateDate',
+                            render: (h, params) => {
+                                return h('span', moment(params.row.CreateDate).format('YYYY-MM-DD'));
+                            }
+                        },
+                        {
+                            title: '修改日期',
+                            key: 'UpdateDate',
+                            render: (h, params) => {
+                                return h('span', moment(params.row.UpdateDate).format('YYYY-MM-DD'));
+                            }
+                        },
+                        {
+                            title: '操作',
+                            key: 'action',
+                            render: (h, params) => {
+                                return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        }, on: {
+                                            click: () => {
+                                                this.EditStoryInfo(params.row.StoryId);
+                                            }
+                                        }
+                                    }, "编辑")
+                                ]);
+                            }
+                        }
+                    ],
+                    tableData: [],
+                    curData: [],
+                    dataCount: 0,
+                    pageSize: 10
+                }
+            },
+            methods: {
+                getList() {
+                    axios.post('GetStoryList').then(response => {
+                        if (response && response.data && response.data.Code == '200') {
+                            this.tableData = response.data.infolist;
+                            this.dataCount = response.data.infolist.length;
+                            if (this.dataCount < this.pageSize) {
+                                this.curData = this.tableData;
+                            } else {
+                                this.curData = this.tableData.slice(0, this.pageSize);
+                            }
+                        }
+                    });
+                },
+                changepage(index) {
+                    var _start = (index - 1) * this.pageSize;
+                    var _end = index * this.pageSize;
+                    this.curData = this.tableData.slice(_start, _end);
+                },
+                GetStoryInfo(id) {
+                    window.open("StoryInfo?id=" + id);
+                },
+                EditStoryInfo(id) {
+                    window.open("EditStoryInfo?id=" + id);
+                },
+            },
+            created() {
+                this.getList();
+            }
+        })
+    });
+</script>

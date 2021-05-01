@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Content/ueditor/ueditor.config.js"></script>
+<script src="~/Content/ueditor/ueditor.all.js"></script>
+<link rel="stylesheet" href="~/Content/ivew/styles/iview.css">
+<script type="text/javascript" src="~/Content/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="~/Content/vue/vue.min.js"></script>
+<script type="text/javascript" src="~/Content/vue/axios.js"></script>
+<script type="text/javascript" src="~/Content/ivew/iview.min.js"></script>
+<script type="text/javascript" src="~/Content/vue/linq.min.js"></script>
+
+<div id="appSAdd">
+    <div class="form-horizontal">
+        <Alert>
+            <div style="text-align:center">
+                <h1> 新建文章 </h1>
+            </div>
+        </Alert>
+        <div style="margin-top:30px; border:1px">
+            <Row style="margin-top:10px">
+                <div>
+                    &nbsp; &nbsp; &nbsp; &nbsp; 文章标题 &nbsp; &nbsp; &nbsp; &nbsp;
+                    <i-input type="text" v-model="formModel.Title" placeholder="标题" style="width:800px">
+                    </i-input>
+                </div>
+            </Row>
+            <Row style="margin-top:10px">
+                <div>
+                    &nbsp; &nbsp; &nbsp; &nbsp; 系类标题 &nbsp; &nbsp; &nbsp; &nbsp;
+                    <i-input type="text" v-model="formModel.SubTitle" placeholder="标题" style="width:800px">
+                    </i-input>
+                </div>
+            </Row>
+            <Row style="margin-top:10px">
+                <div>
+                    &nbsp; &nbsp; &nbsp; &nbsp; 章节排序 &nbsp; &nbsp; &nbsp; &nbsp;
+                    <input-number :max="20" :min="1" type="text" v-model="formModel.IndexSort" style="width:800px">
+                    </input-number>
+                </div>
+            </Row>
+            <Row style="margin-top:10px">
+                <div>
+                    &nbsp; &nbsp; &nbsp; &nbsp;文章类型&nbsp; &nbsp; &nbsp; &nbsp;
+                    <radio-group v-model="formModel.StoryType">
+                        <radio label="0">短篇系列</radio>
+                        <radio label="1">长篇系列</radio>
+                    </radio-group>
+                </div>
+            </Row>
+        </div>
+        <div style="margin-left:100px; ">
+            <div class="col-sm-12" style="padding:5px;">
+                <div class="col-sm-8">
+                    <input id="txtContent" type="text" class="form-control required" style="display:none" value="" />
+                    <script id="editor" type="text/plain" style="width: 90%; height: 400px;">
+                    </script>
+                    <script type="text/javascript">
+                        var ue = UE.getEditor('editor');
+                        ue.addListener('ready', function () {
+                            ue.setContent($("#txtContent").val());
+                        });
+
+                        ue.addListener('blur', function () {
+                            $("#txtContent").val(ue.getContent());
+                        });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer" style="left:0px;right:300px;">
+        <span class="demo-affix"><i-button type="success" @@click="Save">保存</i-button></span>
+    </div>
+</div>
+<script type="text/javascript">
+    (function () {
+        new Vue({
+            el: '#appSAdd',
+            data() {
+                return {
+                    formModel: {},
+        
+                }
+            },
+            methods: {
+                Save() {
+                    this.formModel.Content = $("#txtContent").val();
+                  
+                    axios.post('@Url.Action("SaveStory", "story")' , this.formModel).then(response => {
+                        if (response && response.data) {
+                            if (response.data.Code == '200') {
+                                this.$Notice.success({
+                                    title: '保存成功!',
+                                    desc: " "
+                                });
+                                this.formModel = {};
+                                $("#txtContent").val("");
+                                var ue = UE.getEditor('editor');
+                                ue.setContent("");
+                            }
+                            else {
+                                this.$Message.error(response.data.Message);
+                            }
+                        }
+                        else {
+                            this.warning("系统错误", "保存失败！");
+                        }
+                       
+                    });
+                },
+
+            }
+        });
+    })();
+
+</script>

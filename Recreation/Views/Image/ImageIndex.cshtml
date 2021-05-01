@@ -1,0 +1,260 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div id="appImage" style="padding:32px; padding:20px;">
+    <div style="width:100%">
+        <Alert>
+            <div style="text-align:center">
+                <h1> 走马灯 </h1>
+            </div>
+        </Alert>
+        <br>
+
+        <div class="demo-split">
+            <split v-model="split1">
+                <div slot="left" class="demo-split-pane">
+                    <br>
+                    <tree :data="dirs" :render="renderContent" class="demo-tree-render"></tree>
+                </div>
+                <div slot="right" class="demo-split-pane">
+                    <br>
+                    <carousel v-model="value1" loop autoplay>
+                        <carousel-item class="view-carousel" v-for="image in images">
+                            <img :src="image.url">
+                        </carousel-item>
+                    </carousel>
+                    <br>
+                    <div class="view-image-list" v-for="item in imageList">
+                        <img :src="item.url" class="imgsmall" @@click="handleView(item.url)">
+                    </div>
+                </div>
+            </split>
+        </div>
+
+
+    </div>
+    <Modal v-model="visible" fullscreen title="Fullscreen" footer-hide="true">
+        <div> <img :src="imageUrl"></div>
+    </Modal>
+</div>
+<style>
+    .demo-split {
+        height: 620px;
+        border: 1px solid #dcdee2;
+    }
+
+    .demo-split-pane {
+        padding: 10px;
+        margin-left: 50px
+    }
+
+    .demo-tree-render .ivu-tree-title {
+        width: 100%;
+    }
+    .view-carousel {
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+        color: #fff;
+        font-size: 20px;
+        background: #506b9e;
+    }
+
+    .view-image-list {
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px #888888;
+        margin-right: 4px;
+    }
+
+    .imgsmall {
+        border: 1px solid #555;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+    }
+</style>
+<script>
+    (function () {
+        new Vue({
+            el: '#appImage',
+            data() {
+                return {
+                        split1: 0.22,
+                        dirs: [
+                            {
+                                title: 'parent 1',
+                                expand: true,
+                                render: (h, { root, node, data }) => {
+                                    return h('span', {
+                                        style: {
+                                            display: 'inline-block',
+                                            width: '100%'
+                                        }
+                                    }, [
+                                        h('span', [
+                                            h('Icon', {
+                                                props: {
+                                                    type: 'ios-folder-outline'
+                                                },
+                                                style: {
+                                                    marginRight: '8px'
+                                                }
+                                            }),
+                                            h('span', data.title)
+                                        ])
+                                    ]);
+                                },
+                                children: [
+                                    {
+                                        title: 'child 1-1',
+                                        expand: true,
+                                        render: (h, { root, node, data }) => {
+                                            return h('span', {
+                                                style: {
+                                                    display: 'inline-block',
+                                                    width: '100%'
+                                                }
+                                            }, [
+                                                h('span', [
+                                                    h('Icon', {
+                                                        props: {
+                                                            type: 'ios-folder-outline'
+                                                        },
+                                                        style: {
+                                                            marginRight: '8px'
+                                                        }
+                                                    }),
+                                                    h('span', data.title)
+                                                ])
+                                            ]);
+                                        },
+                                        children: [
+                                            {
+                                                title: 'leaf 1-1-1',
+                                                expand: true
+                                            },
+                                            {
+                                                title: 'leaf 1-1-2',
+                                                expand: true
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        title: 'child 1-2',
+                                        expand: true,
+                                        render: (h, { root, node, data }) => {
+                                            return h('span', {
+                                                style: {
+                                                    display: 'inline-block',
+                                                    width: '100%'
+                                                }
+                                            }, [
+                                                h('span', [
+                                                    h('Icon', {
+                                                        props: {
+                                                            type: 'ios-folder-outline'
+                                                        },
+                                                        style: {
+                                                            marginRight: '8px'
+                                                        }
+                                                    }),
+                                                    h('span', data.title)
+                                                ])
+                                            ]);
+                                        },
+                                        children: [
+                                            {
+                                                title: 'leaf 1-2-1',
+                                                expand: true
+                                            },
+                                            {
+                                                title: 'leaf 1-2-1',
+                                                expand: true
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        buttonProps: {
+                            type: 'default',
+                            size: 'small',
+                        },
+                        visible: false,
+                        imageList: [
+                            { name: "vue.png", url:"/Content/img/vue.png" },
+                            { name: 'JavaScript', url: "/Content/img/javascript-map.png" },
+                            { name: 'Project', url: "/Content/img/project.png" }
+                        ],
+                        value1: 0,
+                        imageUrl: "",
+                        images: [
+                            { id: 'Vue', url: "/Content/img/vue.png" },
+                            { id: 'JavaScript', url: "/Content/img/javascript-map.png" },
+                            { id: 'Project', url: "/Content/img/project.png" }
+                        ]
+                }
+            },
+            methods: {
+                    handleView(name) {
+                        this.visible = true;
+                        this.imageUrl = name;
+                        console.log(name);
+                    },
+                renderContent(h, { root, node, data }) {
+                    return h('span', {
+                        style: {
+                            display: 'inline-block',
+                            width: '100%'
+                        }
+                    }, [
+                        h('span', [
+                            h('Icon', {
+                                props: {
+                                    type: 'ios-paper-outline'
+                                },
+                                style: {
+                                    marginRight: '8px'
+                                }
+                            }),
+                            h('span', data.title)
+                        ]),
+                        h('span', {
+                            style: {
+                                display: 'inline-block',
+                                float: 'right',
+                                marginRight: '32px'
+                            }
+                        }, [
+                            h('Button', {
+                                props: Object.assign({}, this.buttonProps, {
+                                    icon: 'ios-film'
+                                }),
+                                style: {
+                                    marginRight: '8px'
+                                },
+                                on: {
+                                    click: () => { this.append(data) }
+                                }
+                            })
+                        ])
+                    ]);
+                },
+                append(data) {
+                    this.$Message.info(data.title);
+                },
+            }
+        });
+    })();
+</script>

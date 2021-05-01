@@ -1,0 +1,251 @@
+﻿@{
+    ViewBag.Title = "视频";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/css/video-js.min.css" rel="stylesheet">
+    <script src="~/Content/js/video.min.js"></script>
+    <style>
+
+        .auth-video {
+            font-size: 12px;
+            transition: none;
+            display: inline-block;
+            vertical-align: text-bottom;
+            font-size: 12px;
+            margin-right: 10px;
+            padding: 0 5px;
+            height: 22px;
+            line-height: 22px;
+            border-radius: 2px;
+            color: #fff;
+            background-color: #ffafc9;
+            vertical-align: middle;
+        }
+
+        .title-video {
+            margin: 0px 0px 50px 0px;
+        }
+
+        .head {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-top: -30px;
+        }
+        .demo-split {
+            height: 620px;
+            border: 1px solid #dcdee2;
+        }
+
+        .demo-split-pane {
+            padding: 2px;
+            margin-left:50px
+        }
+        .demo-tree-render .ivu-tree-title {
+            width: 100%;
+        }
+    </style>
+   
+</head>
+<body>
+    <div id="appVideo" style="margin:30px 50px 0px 50px">
+        <div class="demo-split">
+            <split v-model="split1">
+                <div slot="left" class="demo-split-pane">
+                    <br>
+                    <tree :data="dirs" :render="renderContent" class="demo-tree-render"></tree>
+                </div>
+                <div slot="right" class="demo-split-pane">
+                    <br>
+                    <div class="m">
+                        <div id="viewbox_report" style="margin-bottom:20px">
+                            <h1><span class="auth-video">小猪霞</span>   <span>海鸥群VS鱼群</span></h1>
+                            <h4>2021-05-01 10:20:10</h4>
+                        </div>
+                        <video id="my-video" class="video-js" controls preload="auto" width="800" height="497"
+                               poster="~/Content/img/m.jpg" data-setup="{}">
+                            <source src="~/Content/video/oceans.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </split>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+
+        (function () {
+            new Vue({
+                el: '#appVideo',
+                data() {
+                    return {
+                        split1: 0.22,
+                        dirs: [
+                            {
+                                title: 'parent 1',
+                                expand: true,
+                                render: (h, { root, node, data }) => {
+                                    return h('span', {
+                                        style: {
+                                            display: 'inline-block',
+                                            width: '100%'
+                                        }
+                                    }, [
+                                        h('span', [
+                                            h('Icon', {
+                                                props: {
+                                                    type: 'ios-folder-outline'
+                                                },
+                                                style: {
+                                                    marginRight: '8px'
+                                                }
+                                            }),
+                                            h('span', data.title)
+                                        ])
+                                    ]);
+                                },
+                                children: [
+                                    {
+                                        title: 'child 1-1',
+                                        expand: true,
+                                        render: (h, { root, node, data }) => {
+                                            return h('span', {
+                                                style: {
+                                                    display: 'inline-block',
+                                                    width: '100%'
+                                                }
+                                            }, [
+                                                h('span', [
+                                                    h('Icon', {
+                                                        props: {
+                                                            type: 'ios-folder-outline'
+                                                        },
+                                                        style: {
+                                                            marginRight: '8px'
+                                                        }
+                                                    }),
+                                                    h('span', data.title)
+                                                ])
+                                            ]);
+                                        },
+                                        children: [
+                                            {
+                                                title: 'leaf 1-1-1',
+                                                expand: true
+                                            },
+                                            {
+                                                title: 'leaf 1-1-2',
+                                                expand: true
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        title: 'child 1-2',
+                                        expand: true,
+                                        render: (h, { root, node, data }) => {
+                                            return h('span', {
+                                                style: {
+                                                    display: 'inline-block',
+                                                    width: '100%'
+                                                }
+                                            }, [
+                                                h('span', [
+                                                    h('Icon', {
+                                                        props: {
+                                                            type: 'ios-folder-outline'
+                                                        },
+                                                        style: {
+                                                            marginRight: '8px'
+                                                        }
+                                                    }),
+                                                    h('span', data.title)
+                                                ])
+                                            ]);
+                                        },
+                                        children: [
+                                            {
+                                                title: 'leaf 1-2-1',
+                                                expand: true
+                                            },
+                                            {
+                                                title: 'leaf 1-2-1',
+                                                expand: true
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        buttonProps: {
+                            type: 'default',
+                            size: 'small',
+                        }
+                    }
+                },
+                methods: {
+                    renderContent(h, { root, node, data }) {
+                        return h('span', {
+                            style: {
+                                display: 'inline-block',
+                                width: '100%'
+                            }
+                        }, [
+                            h('span', [
+                                h('Icon', {
+                                    props: {
+                                        type: 'ios-paper-outline'
+                                    },
+                                    style: {
+                                        marginRight: '8px'
+                                    }
+                                }),
+                                h('span', data.title)
+                            ]),
+                            h('span', {
+                                style: {
+                                    display: 'inline-block',
+                                    float: 'right',
+                                    marginRight: '32px'
+                                }
+                            }, [
+                                h('Button', {
+                                    props: Object.assign({}, this.buttonProps, {
+                                        icon: 'ios-film'
+                                    }),
+                                    style: {
+                                        marginRight: '8px'
+                                    },
+                                    on: {
+                                        click: () => { this.append(data) }
+                                    }})
+                            ])
+                        ]);
+                    },
+                    append(data) {
+                        this.$Message.info(data.title);
+                    },
+                    loadDir() {
+                        axios.post('GetDirList?path=D:/VSPath2019').then(response => {
+                            if (response && response.data && response.data.Code == '200') {
+                                let files = response.data.Infolist;
+                                let work = Enumerable.from(files).orderByDescending("x=>x.ParentSetNo").toArray();
+                              
+                            }
+                        });
+                    },
+                    
+                },
+                created() {
+                    this.loadDir();
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>
